@@ -1,22 +1,14 @@
 let currentStep = 1;
-const totalSteps = 4;
 
 function updateStepIndicator(step) {
-  document.querySelectorAll('.step').forEach((el, idx) => {
-    const stepNum = idx / 2 + 1; // Account for step-lines between steps
-    el.classList.remove('active', 'done');
-  });
-
-  const stepEls = document.querySelectorAll('.step[data-step]');
-  const lineEls = document.querySelectorAll('.step-line');
-
-  stepEls.forEach((el) => {
+  document.querySelectorAll('.step[data-step]').forEach((el) => {
     const s = parseInt(el.dataset.step);
+    el.classList.remove('active', 'done');
     if (s === step) el.classList.add('active');
     else if (s < step) el.classList.add('done');
   });
 
-  lineEls.forEach((el, idx) => {
+  document.querySelectorAll('.step-line').forEach((el, idx) => {
     if (idx + 1 < step) el.classList.add('done');
     else el.classList.remove('done');
   });
@@ -25,34 +17,7 @@ function updateStepIndicator(step) {
 function showSection(sectionNum) {
   document.querySelectorAll('.form-section').forEach(s => s.classList.add('hidden'));
   const target = document.querySelector(`.form-section[data-section="${sectionNum}"]`);
-  if (target) {
-    target.classList.remove('hidden');
-  }
-}
-
-function validateStep(step) {
-  if (step === 1) {
-    const checked = document.querySelectorAll('input[name="style"]:checked');
-    if (checked.length === 0) {
-      showValidationError('過ごしたいスタイルを1つ以上選択してください');
-      return false;
-    }
-  }
-  if (step === 2) {
-    const checked = document.querySelector('input[name="family"]:checked');
-    if (!checked) {
-      showValidationError('誰と過ごすか選択してください');
-      return false;
-    }
-  }
-  if (step === 3) {
-    const checked = document.querySelectorAll('input[name="area"]:checked');
-    if (checked.length === 0) {
-      showValidationError('エリアを1つ以上選択してください');
-      return false;
-    }
-  }
-  return true;
+  if (target) target.classList.remove('hidden');
 }
 
 function showValidationError(msg) {
@@ -71,6 +36,28 @@ function showValidationError(msg) {
   `;
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 3000);
+}
+
+function validateStep(step) {
+  if (step === 1) {
+    if (!document.querySelectorAll('input[name="style"]:checked').length) {
+      showValidationError('過ごしたいスタイルを1つ以上選択してください');
+      return false;
+    }
+  }
+  if (step === 2) {
+    if (!document.querySelector('input[name="family"]:checked')) {
+      showValidationError('誰と過ごすか選択してください');
+      return false;
+    }
+  }
+  if (step === 3) {
+    if (!document.querySelectorAll('input[name="area"]:checked').length) {
+      showValidationError('エリアを1つ以上選択してください');
+      return false;
+    }
+  }
+  return true;
 }
 
 function nextStep(fromStep) {
@@ -114,7 +101,7 @@ document.getElementById('planForm').addEventListener('submit', async (e) => {
     return;
   }
 
-  // Show result section
+  // Show result section with loading
   document.querySelector('.plan-form').classList.add('hidden');
   document.querySelector('.steps').classList.add('hidden');
   const resultSection = document.getElementById('resultSection');
@@ -126,79 +113,38 @@ document.getElementById('planForm').addEventListener('submit', async (e) => {
   planContent.classList.add('hidden');
   planContent.innerHTML = '';
 
-  let fullText = '';
+  // Simulate a brief loading delay for UX
+  await new Promise(resolve => setTimeout(resolve, 800));
 
   try {
-    const response = await fetch('/api/recommend', {
+    const res = await fetch('/api/recommend', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ style, family, area, likes, dislikes }),
     });
 
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
+    const plan = await res.json();
 
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-
-      const chunk = decoder.decode(value, { stream: true });
-      const lines = chunk.split('\n');
-
-      for (const line of lines) {
-        if (line.startsWith('data: ')) {
-          try {
-            const data = JSON.parse(line.slice(6));
-            if (data.text) {
-              fullText += data.text;
-            }
-            if (data.done) {
-              loadingState.classList.add('hidden');
-              renderPlan(fullText, planContent);
-              planContent.classList.remove('hidden');
-              window.scrollTo({ top: document.querySelector('.result-header').offsetTop - 20, behavior: 'smooth' });
-            }
-            if (data.error) {
-              loadingState.classList.add('hidden');
-              planContent.innerHTML = `<div style="background:white;padding:32px;border-radius:16px;text-align:center;color:#c0392b;">
-                <p style="font-size:1.1rem;font-weight:600;">エラーが発生しました</p>
-                <p style="margin-top:8px;color:#666;">${data.error}</p>
-                <p style="margin-top:16px;font-size:0.85rem;color:#999;">ANTHROPIC_API_KEY 環境変数が設定されているか確認してください</p>
-              </div>`;
-              planContent.classList.remove('hidden');
-            }
-          } catch {}
-        }
-      }
+    if (!res.ok) {
+      throw new Error(plan.error || 'サーバーエラーが発生しました');
     }
+
+    loadingState.classList.add('hidden');
+    renderPlan(plan, planContent);
+    planContent.classList.remove('hidden');
+    window.scrollTo({ top: document.querySelector('.result-header').offsetTop - 20, behavior: 'smooth' });
+
   } catch (err) {
     loadingState.classList.add('hidden');
     planContent.innerHTML = `<div style="background:white;padding:32px;border-radius:16px;text-align:center;">
-      <p style="color:#c0392b;font-weight:600;">接続エラーが発生しました</p>
-      <p style="margin-top:8px;color:#666;">${err.message}</p>
+      <p style="color:#c0392b;font-size:1.1rem;font-weight:600;">エラーが発生しました</p>
+      <p style="margin-top:8px;color:#666;">${escapeHtml(err.message)}</p>
     </div>`;
     planContent.classList.remove('hidden');
   }
 });
 
-function renderPlan(text, container) {
-  // Extract JSON from the response (may have thinking blocks prepended)
-  let jsonText = text;
-  const jsonMatch = text.match(/\{[\s\S]*\}/);
-  if (jsonMatch) {
-    jsonText = jsonMatch[0];
-  }
-
-  let plan;
-  try {
-    plan = JSON.parse(jsonText);
-  } catch {
-    container.innerHTML = `<div class="section-card" style="padding:24px;">
-      <pre style="white-space:pre-wrap;font-size:0.85rem;line-height:1.7;">${escapeHtml(text)}</pre>
-    </div>`;
-    return;
-  }
-
+function renderPlan(plan, container) {
   let html = '';
 
   // Header Card
@@ -211,7 +157,7 @@ function renderPlan(text, container) {
   `;
 
   // Schedule
-  if (plan.schedule && plan.schedule.length > 0) {
+  if (plan.schedule?.length > 0) {
     html += `
       <div class="section-card">
         <div class="section-card-header">
@@ -248,7 +194,7 @@ function renderPlan(text, container) {
   }
 
   // Meals
-  if (plan.meals && plan.meals.length > 0) {
+  if (plan.meals?.length > 0) {
     const mealIcons = { '朝食': '🌅', '昼食': '☀️', '夕食': '🌙', 'ランチ': '☀️', 'ディナー': '🌙', 'ブランチ': '🍳' };
     html += `
       <div class="section-card">
@@ -280,7 +226,6 @@ function renderPlan(text, container) {
 
   // Budget & Advice
   html += `<div class="info-cards">`;
-
   if (plan.totalBudget) {
     html += `
       <div class="info-card">
@@ -292,7 +237,6 @@ function renderPlan(text, container) {
       </div>
     `;
   }
-
   if (plan.advice) {
     html += `
       <div class="info-card">
@@ -304,7 +248,6 @@ function renderPlan(text, container) {
       </div>
     `;
   }
-
   html += `</div>`;
 
   container.innerHTML = html;
