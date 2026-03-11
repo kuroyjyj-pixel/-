@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>名古屋 休日プランナー</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <div class="header-logo">
+        <span class="logo-icon">🏯</span>
+        <div>
+          <h1>名古屋 休日プランナー</h1>
+          <p>あなただけの特別な一日を見つけよう</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="container">
+      <!-- Step Indicator -->
+      <div class="steps">
+        <div class="step active" data-step="1">
+          <div class="step-circle">1</div>
+          <span>スタイル</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step" data-step="2">
+          <div class="step-circle">2</div>
+          <span>家族構成</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step" data-step="3">
+          <div class="step-circle">3</div>
+          <span>エリア</span>
+        </div>
+        <div class="step-line"></div>
+        <div class="step" data-step="4">
+          <div class="step-circle">4</div>
+          <span>好み</span>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <form id="planForm" class="plan-form">
+
+        <!-- Step 1: Style -->
+        <section class="form-section" data-section="1">
+          <div class="section-header">
+            <span class="section-icon">✨</span>
+            <div>
+              <h2>どんな休日を過ごしたいですか？</h2>
+              <p class="section-desc">複数選択できます</p>
+            </div>
+          </div>
+          <div class="card-grid">
+            <label class="card-option">
+              <input type="checkbox" name="style" value="アクティブ・スポーツ">
+              <div class="card-content">
+                <span class="card-icon">🏃</span>
+                <span class="card-label">アクティブ</span>
+                <span class="card-sub">スポーツ・体を動かす</span>
+              </div>
+            </label>
+            <label class="card-option">
+              <input type="checkbox" name="style" value="のんびり・リラックス">
+              <div class="card-content">
+                <span class="card-icon">😌</span>
+                <span class="card-label">のんびり</span>
+                <span class="card-sub">リラックス・癒し</span>
+              </div>
+            </label>
+            <label class="card-option">
+              <input type="checkbox" name="style" value="文化・歴史探訪">
+              <div class="card-content">
+                <span class="card-icon">🏛️</span>
+                <span class="card-label">文化・歴史</span>
+                <span class="card-sub">寺社・博物館・史跡</span>
+              </div>
+            </label>
+            <label class="card-option">
+              <input type="checkbox" name="style" value="グルメ・食べ歩き">
+              <div class="card-content">
+                <span class="card-icon">🍜</span>
+                <span class="card-label">グルメ</span>
+                <span class="card-sub">食べ歩き・名古屋めし</span>
+              </div>
+            </label>
+            <label class="card-option">
+              <input type="checkbox" name="style" value="ショッピング・おでかけ">
+              <div class="card-content">
+                <span class="card-icon">🛍️</span>
+                <span class="card-label">ショッピング</span>
+                <span class="card-sub">買い物・散策</span>
+              </div>
+            </label>
+            <label class="card-option">
+              <input type="checkbox" name="style" value="自然・アウトドア">
+              <div class="card-content">
+                <span class="card-icon">🌿</span>
+                <span class="card-label">自然・アウトドア</span>
+                <span class="card-sub">公園・緑・景色</span>
+              </div>
+            </label>
+            <label class="card-option">
+              <input type="checkbox" name="style" value="アート・エンタメ">
+              <div class="card-content">
+                <span class="card-icon">🎨</span>
+                <span class="card-label">アート・エンタメ</span>
+                <span class="card-sub">美術館・ライブ・展示</span>
+              </div>
+            </label>
+            <label class="card-option">
+              <input type="checkbox" name="style" value="カフェ・スイーツ巡り">
+              <div class="card-content">
+                <span class="card-icon">☕</span>
+                <span class="card-label">カフェ巡り</span>
+                <span class="card-sub">喫茶・スイーツ</span>
+              </div>
+            </label>
+          </div>
+          <div class="nav-buttons">
+            <button type="button" class="btn btn-primary" onclick="nextStep(1)">次へ →</button>
+          </div>
+        </section>
+
+        <!-- Step 2: Family -->
+        <section class="form-section hidden" data-section="2">
+          <div class="section-header">
+            <span class="section-icon">👨‍👩‍👧‍👦</span>
+            <div>
+              <h2>誰と過ごしますか？</h2>
+              <p class="section-desc">一つ選択してください</p>
+            </div>
+          </div>
+          <div class="card-grid">
+            <label class="card-option radio-option">
+              <input type="radio" name="family" value="一人（ソロ）">
+              <div class="card-content">
+                <span class="card-icon">🧑</span>
+                <span class="card-label">一人（ソロ）</span>
+                <span class="card-sub">自分のペースで</span>
+              </div>
+            </label>
+            <label class="card-option radio-option">
+              <input type="radio" name="family" value="カップル・夫婦（二人）">
+              <div class="card-content">
+                <span class="card-icon">👫</span>
+                <span class="card-label">カップル・夫婦</span>
+                <span class="card-sub">二人でデート</span>
+              </div>
+            </label>
+            <label class="card-option radio-option">
+              <input type="radio" name="family" value="友人グループ（大人のみ）">
+              <div class="card-content">
+                <span class="card-icon">👯</span>
+                <span class="card-label">友人グループ</span>
+                <span class="card-sub">仲間と楽しく</span>
+              </div>
+            </label>
+            <label class="card-option radio-option">
+              <input type="radio" name="family" value="家族（小さな子ども連れ）">
+              <div class="card-content">
+                <span class="card-icon">👨‍👩‍👧</span>
+                <span class="card-label">子ども連れ家族</span>
+                <span class="card-sub">小さな子どもと</span>
+              </div>
+            </label>
+            <label class="card-option radio-option">
+              <input type="radio" name="family" value="家族（中高生連れ）">
+              <div class="card-content">
+                <span class="card-icon">👨‍👩‍👦</span>
+                <span class="card-label">中高生連れ家族</span>
+                <span class="card-sub">ティーンと一緒に</span>
+              </div>
+            </label>
+            <label class="card-option radio-option">
+              <input type="radio" name="family" value="シニア・高齢者と">
+              <div class="card-content">
+                <span class="card-icon">👴👵</span>
+                <span class="card-label">シニアと一緒</span>
+                <span class="card-sub">ゆっくりのんびり</span>
+              </div>
+            </label>
+          </div>
+          <div class="nav-buttons">
+            <button type="button" class="btn btn-secondary" onclick="prevStep(2)">← 戻る</button>
+            <button type="button" class="btn btn-primary" onclick="nextStep(2)">次へ →</button>
+          </div>
+        </section>
+
+        <!-- Step 3: Area -->
+        <section class="form-section hidden" data-section="3">
+          <div class="section-header">
+            <span class="section-icon">🗺️</span>
+            <div>
+              <h2>どのエリアに行きたいですか？</h2>
+              <p class="section-desc">複数選択できます</p>
+            </div>
+          </div>
+          <div class="card-grid">
+            <label class="card-option">
+              <input type="checkbox" name="area" value="名古屋城・名城周辺">
+              <div class="card-content">
+                <span class="card-icon">🏯</span>
+                <span class="card-label">名古屋城・名城</span>
+                <span class="card-sub">城・歴史の中心地</span>
+              </div>
+            </label>
+            <label class="card-option">
+              <input type="checkbox" name="area" value="栄・伏見・矢場町">
+              <div class="card-content">
+                <span class="card-icon">🌆</span>
+                <span class="card-label">栄・伏見・矢場町</span>
+                <span class="card-sub">都市の中心・繁華街</span>
+              </div>
+            </label>
+            <label class="card-option">
+              <input type="checkbox" name="area" value="名古屋駅・ミッドランド周辺">
+              <div class="card-content">
+                <span class="card-icon">🚉</span>
+                <span class="card-label">名古屋駅周辺</span>
+                <span class="card-sub">駅前・ミッドランド</span>
+              </div>
+            </label>
+            <label class="card-option">
+              <input type="checkbox" name="area" value="大須・鶴舞周辺">
+              <div class="card-content">
+                <span class="card-icon">⛩️</span>
+                <span class="card-label">大須・鶴舞</span>
+                <span class="card-sub">商店街・アメ横</span>
+              </div>
+            </label>
+            <label class="card-option">
+              <input type="checkbox" name="area" value="熱田・港区（名古屋港）">
+              <div class="card-content">
+                <span class="card-icon">⚓</span>
+                <span class="card-label">熱田・名古屋港</span>
+                <span class="card-sub">熱田神宮・水族館</span>
+              </div>
+            </label>
+            <label class="card-option">
+              <input type="checkbox" name="area" value="東山・千種・覚王山">
+              <div class="card-content">
+                <span class="card-icon">🦁</span>
+                <span class="card-label">東山・覚王山</span>
+                <span class="card-sub">動物園・おしゃれカフェ</span>
+              </div>
+            </label>
+            <label class="card-option">
+              <input type="checkbox" name="area" value="鶴舞公園・昭和区">
+              <div class="card-content">
+                <span class="card-icon">🌸</span>
+                <span class="card-label">鶴舞公園・昭和</span>
+                <span class="card-sub">公園・緑・自然</span>
+              </div>
+            </label>
+            <label class="card-option">
+              <input type="checkbox" name="area" value="守山・名東・天白（郊外）">
+              <div class="card-content">
+                <span class="card-icon">🏞️</span>
+                <span class="card-label">郊外エリア</span>
+                <span class="card-sub">守山・名東・天白</span>
+              </div>
+            </label>
+          </div>
+          <div class="nav-buttons">
+            <button type="button" class="btn btn-secondary" onclick="prevStep(3)">← 戻る</button>
+            <button type="button" class="btn btn-primary" onclick="nextStep(3)">次へ →</button>
+          </div>
+        </section>
+
+        <!-- Step 4: Likes & Dislikes -->
+        <section class="form-section hidden" data-section="4">
+          <div class="section-header">
+            <span class="section-icon">💖</span>
+            <div>
+              <h2>好みを教えてください</h2>
+              <p class="section-desc">好き・苦手を選んでプランをカスタマイズ</p>
+            </div>
+          </div>
+
+          <div class="preference-grid">
+            <div class="preference-column">
+              <h3 class="pref-title likes-title">❤️ 好き・やりたいこと</h3>
+              <div class="tag-group">
+                <label class="tag-option like-tag">
+                  <input type="checkbox" name="likes" value="写真撮影・インスタ映え">
+                  📸 写真・インスタ映え
+                </label>
+                <label class="tag-option like-tag">
+                  <input type="checkbox" name="likes" value="地元グルメ・名古屋めし">
+                  🍱 名古屋めし
+                </label>
+                <label class="tag-option like-tag">
+                  <input type="checkbox" name="likes" value="日本庭園・伝統文化">
+                  🎋 日本庭園・伝統
+                </label>
+                <label class="tag-option like-tag">
+                  <input type="checkbox" name="likes" value="水族館・動物園・博物館">
+                  🐠 水族館・動物園
+                </label>
+                <label class="tag-option like-tag">
+                  <input type="checkbox" name="likes" value="ものづくり・工場見学">
+                  🏭 ものづくり・工場
+                </label>
+                <label class="tag-option like-tag">
+                  <input type="checkbox" name="likes" value="夜景・ライトアップ">
+                  ✨ 夜景・イルミ
+                </label>
+                <label class="tag-option like-tag">
+                  <input type="checkbox" name="likes" value="読書・静かな時間">
+                  📚 読書・静かな時間
+                </label>
+                <label class="tag-option like-tag">
+                  <input type="checkbox" name="likes" value="体験・ワークショップ">
+                  🎭 体験・ワークショップ
+                </label>
+                <label class="tag-option like-tag">
+                  <input type="checkbox" name="likes" value="サイクリング・ウォーキング">
+                  🚴 サイクリング・歩く
+                </label>
+                <label class="tag-option like-tag">
+                  <input type="checkbox" name="likes" value="ショッピング・雑貨">
+                  🛒 ショッピング・雑貨
+                </label>
+              </div>
+            </div>
+
+            <div class="preference-column">
+              <h3 class="pref-title dislikes-title">💔 苦手・避けたいこと</h3>
+              <div class="tag-group">
+                <label class="tag-option dislike-tag">
+                  <input type="checkbox" name="dislikes" value="混雑した場所">
+                  😤 混雑・人混み
+                </label>
+                <label class="tag-option dislike-tag">
+                  <input type="checkbox" name="dislikes" value="長時間の歩行">
+                  🦵 長時間の歩行
+                </label>
+                <label class="tag-option dislike-tag">
+                  <input type="checkbox" name="dislikes" value="屋外・炎天下">
+                  ☀️ 屋外・炎天下
+                </label>
+                <label class="tag-option dislike-tag">
+                  <input type="checkbox" name="dislikes" value="乗り物（船・アトラクション）">
+                  🎢 乗り物・アトラクション
+                </label>
+                <label class="tag-option dislike-tag">
+                  <input type="checkbox" name="dislikes" value="高所・高い場所">
+                  😨 高所・高い場所
+                </label>
+                <label class="tag-option dislike-tag">
+                  <input type="checkbox" name="dislikes" value="静かすぎる場所">
+                  😴 静かすぎる場所
+                </label>
+                <label class="tag-option dislike-tag">
+                  <input type="checkbox" name="dislikes" value="激辛・独特な味">
+                  🌶️ 激辛・独特な味
+                </label>
+                <label class="tag-option dislike-tag">
+                  <input type="checkbox" name="dislikes" value="お土産・買い物">
+                  🛍️ お土産・買い物
+                </label>
+                <label class="tag-option dislike-tag">
+                  <input type="checkbox" name="dislikes" value="長時間の移動">
+                  🚃 長時間の移動
+                </label>
+                <label class="tag-option dislike-tag">
+                  <input type="checkbox" name="dislikes" value="暗い・怖い場所">
+                  👻 暗い・怖い場所
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="nav-buttons">
+            <button type="button" class="btn btn-secondary" onclick="prevStep(4)">← 戻る</button>
+            <button type="submit" class="btn btn-submit" id="submitBtn">
+              <span class="btn-icon">🌸</span>
+              プランを作成する
+            </button>
+          </div>
+        </section>
+      </form>
+
+      <!-- Result Section -->
+      <section id="resultSection" class="result-section hidden">
+        <div class="result-header">
+          <button class="btn btn-secondary back-btn" onclick="resetForm()">← 条件を変更する</button>
+          <h2 class="result-title">あなたへのおすすめプラン</h2>
+        </div>
+
+        <div id="loadingState" class="loading-state">
+          <div class="loading-animation">
+            <div class="loading-circles">
+              <div></div><div></div><div></div>
+            </div>
+            <p class="loading-text">AIがあなたに最適なプランを考えています...</p>
+            <p class="loading-sub">名古屋の魅力たっぷりのプランをご用意中 🏯</p>
+          </div>
+        </div>
+
+        <div id="planContent" class="plan-content hidden"></div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>名古屋 休日プランナー | Powered by Claude AI 🤖</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
